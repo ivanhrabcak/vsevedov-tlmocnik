@@ -14,7 +14,6 @@ type DbState = State<DatabaseConnection>;
 
 #[launch]
 async fn rocket() -> _ {
-
     dotenv::dotenv()
         .context("Unable to load environment variables from .env")
         .unwrap();

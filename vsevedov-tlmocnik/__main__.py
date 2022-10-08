@@ -28,7 +28,6 @@ app.add_middleware(
 
 @app.post("/flags")
 def determine_flags_for_article(article: ArticleRequest):
-    print(article)
-    result = [(flag.display_name, flag.is_fired(article.article)) for flag in flags]
+    result = [(flag.display_name, flag.id, flag.is_fired(article.article)) for flag in flags]
     print(result)
     return result

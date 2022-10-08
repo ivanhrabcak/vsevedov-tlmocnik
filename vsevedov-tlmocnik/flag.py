@@ -31,7 +31,7 @@ class Flag:
         print(answer)
 
         completion = openai.Completion.create(
-            model="text-curie-001",
+            model="text-davinci-002",
             prompt=f"""{self.classification_prompt} 
 {answer}""")
 

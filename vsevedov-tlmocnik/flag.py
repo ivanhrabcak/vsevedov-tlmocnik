@@ -10,24 +10,27 @@ class AnswerEnum(enum.Enum):
 
 class Flag:
     prompt: str
+    display_name: str
 
-    def __init__(self) -> None:
-        pass
-    
     def answer_prompt(self, article: str) -> AnswerEnum:
-    
         openai.api_key = os.getenv("OPENAI_API_KEY")
+        full_prompt = f"""Tu je článok:
+\"\"\"
+{article}
+\"\"\"
+{self.prompt}"""
         completion = openai.Completion.create(
             model="text-davinci-002",
-            prompt=article,
-            max_tokens=21,
+            prompt=full_prompt,
+            max_tokens=256,
             temperature=0.7
         )
-        answer = completion["choices"][0]["text"]
+        answer = completion["choices"][0]["text"].replace(self.prompt, "")
+        print(answer, self.prompt)
 
         for _, enum_member in AnswerEnum._member_map_.items():
             if enum_member.value in answer.lower():
                 return enum_member
 
-    def flag_fired(self) -> AnswerEnum:
+    def is_fired(self, article: str) -> AnswerEnum:
         raise NotImplemented("flag_fired not implemented")

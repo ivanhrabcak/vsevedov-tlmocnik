@@ -12,9 +12,11 @@ class Flag:
     prompt: str
     display_name: str
 
-    def answer_prompt(self, article: str) -> AnswerEnum:
+    classification_prompt = "Which statement could this statement be simplified to? (Yes., No., Cannot tell.)\nStatement:"
+
+    def answer_prompt(self, article: str) -> str:
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        full_prompt = f"""Tu je článok:
+        full_prompt = f"""Here's an article::
 \"\"\"
 {article}
 \"\"\"
@@ -25,12 +27,23 @@ class Flag:
             max_tokens=256,
             temperature=0.7
         )
-        answer = completion["choices"][0]["text"].replace(self.prompt, "")
-        print(answer, self.prompt)
+        answer = completion["choices"][0]["text"]
+        print(answer)
+
+        completion = openai.Completion.create(
+            model="text-curie-001",
+            prompt=f"""{self.classification_prompt} 
+{answer}""")
+
+        answer = completion["choices"][0]["text"]
 
         for _, enum_member in AnswerEnum._member_map_.items():
             if enum_member.value in answer.lower():
                 return enum_member
 
-    def is_fired(self, article: str) -> AnswerEnum:
+        print(answer, self.prompt)
+
+        return answer
+
+    def is_fired(self, article: str) -> bool:
         raise NotImplemented("flag_fired not implemented")

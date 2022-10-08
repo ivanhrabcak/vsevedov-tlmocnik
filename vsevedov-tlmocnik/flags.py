@@ -2,51 +2,51 @@ from .flag import AnswerEnum, Flag
 
 class NegativeEmotionFlag(Flag):
     display_name = "Tento článok sa snaží vyvolať v čitateľovi negatívne emócie."
-    prompt = "Snaží sa článok v čitateľovi vyvolať negatívne emócie? (yes/no/cannot tell)"
+    prompt = "Is this article trying to evoke negative feelings in the reader?"
 
-    def is_fired(self, article: str) -> AnswerEnum:
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class ProvocativeToneFlag(Flag):
     display_name = "Tento článok je napísaný v provokatívnom tóne."
-    prompt = "Má tento článok provokatívny tón? (yes/no/cannot tell)"
+    prompt = "Is this article written in a provocative tone?"
 
-    def is_fired(self, article: str) -> AnswerEnum:
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class ControversialTopicFlag(Flag):
     display_name = "Tento článok hovorí o kontroverzných témach."
-    prompt = "Píše tento článok o kontroverznej téme? (yes/no/cannot tell)"
+    prompt = "Does this article mention any controversial topics<"
     
-    def is_fired(self, article: str) -> AnswerEnum:
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class AlarmingToneFlag(Flag):
     display_name = "Tento článok má alarmujúci tón."
-    prompt = "Má článok alarmujúci tón? (yes/no/cannot tell)"
+    prompt = "Does this article have an alarming tone?"
 
-    def is_fired(self, article: str) -> AnswerEnum:
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class ImmidiateReactionFlag(Flag):
     display_name = "Tento článok žiada čitateľa o neodkladné konanie."
-    prompt = "Žiada (priamo alebo nepriamo) článok čitateľa aby ihneď konal? (yes/no/cannot tell)"
+    prompt = "Does this article request immidiate action from the reader?"
 
-    def is_fired(self, article: str):
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class ProfitIncentiveFlag(Flag):
     display_name = "Tento článok je napísaný za účelom profitu."
-    prompt = "Je článok napísaný za účelom profitu pre autora? (yes/no/cannot tell)"
+    prompt = "Is this article written for the intention of earning money?"
 
-    def is_fired(self, article: str):
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 class SharingIncentiveFlag(Flag):
     display_name = "Tento článok vyzýva k jeho zdieľaniu."
-    prompt = "Vyzýva článok čitateľa k šíreniu tohto článku? (yes/no/cannot tell)"
+    prompt = "Does this article ask the reader to share it?"
 
-    def is_fired(self, article: str):
+    def is_fired(self, article: str) -> bool:
         return True if self.answer_prompt(article) == AnswerEnum.YES else False
 
 flags = [NegativeEmotionFlag(), ProvocativeToneFlag(), 

@@ -8,6 +8,7 @@ from .request import ArticleRequest
 
 import orjson
 
+from joblib import Parallel, delayed
 from fastapi.responses import JSONResponse
 
 load_dotenv()
@@ -26,8 +27,11 @@ app.add_middleware(
     allow_methods=["*"]
 )
 
+def flag_result(article, flag):
+    return [flag.display_name, flag.id, flag.is_fired(article.article)]
+
 @app.post("/flags")
 def determine_flags_for_article(article: ArticleRequest):
-    result = [(flag.display_name, flag.id, flag.is_fired(article.article)) for flag in flags]
+    result = (Parallel(n_jobs=7)(delayed(flag_result)(article, flag) for flag in flags))
     print(result)
     return result
